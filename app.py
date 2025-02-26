@@ -11,11 +11,10 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         mydb = mysql.connector.connect(
-            host="sql7.freesqldatabase.com",
-            user = "sql7763255",
-            password = "DjyuSsajju",
-            database = "sql7763255"
-        )
+            host="sql8.freesqldatabase.com",
+            user = "sql8764909",
+            password = "8cEtjHmsu5",
+            database = "sql8764909")
         mycursor = mydb.cursor()
         mycursor.execute('SELECT * FROM LoginDetails WHERE Name = %s AND Passwrd = %s', (username, password))
         account = mycursor.fetchone()
@@ -30,7 +29,28 @@ def login():
             render_template("login.html", msg=msg)
 
         
+@app.route("/register", methods=["POST", "GET"])
+def register_user():
+    msg = ""
+    if request.method == "POST" and "username" in request.form and "password" in request.form:
+        username = request.form["username"]
+        password = request.form["password"]
+        mydb = mysql.connector.connect(
+            host="sql8.freesqldatabase.com",
+            user = "sql8764909",
+            password = "8cEtjHmsu5",
+            database = "sql8764909")
+        mycursor = mydb.cursor()
+        mycursor.execute('SELECT * FROM LoginDetails WHERE Name = %s AND Passwrd = %s', (username, password))
+        account = mycursor.fetchone()
+        if account:
+            msg ="Hey! We already have this account babe!"
+        else:
+            mycursor.execute('INSERT INTO LoginDetails VALUES (NULL, %s,%s)', (username,password)) # new commend for sending information or creating a user
+            mydb.commit()
+            msg = "YOU REGISTERED BABE! "
 
+    return render_template("registration.html", msg=msg)
 
 
 @app.route("/")
